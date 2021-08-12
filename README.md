@@ -1,6 +1,6 @@
 # Ansible Molecule Fedora 34
 
-[![Docker Repository on Quay](https://quay.io/repository/kasra_amirsarvari/ansible-molecule-fedora-34/status "Docker Repository on Quay")](https://quay.io/repository/kasra_amirsarvari/ansible-molecule-fedora-34) ![GitHub Actions](https://github.com/Caseraw/ansible-molecule-fedora-34/actions/workflows/docker-test-build-push.yml/badge.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/caseraw/ansible-molecule-fedora-34) ![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/caseraw/ansible-molecule-fedora-34/latest) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/caseraw/ansible-molecule-fedora-34/latest) ![Docker Stars](https://img.shields.io/docker/stars/caseraw/ansible-molecule-fedora-34)
+![GitHub Actions](https://github.com/Caseraw/ansible-molecule-fedora-34/actions/workflows/docker-test-build-push.yml/badge.svg) ![GitHub Actions](https://github.com/Caseraw/ansible-molecule-fedora-34/actions/workflows/podman-test-build-push.yml/badge.svg) 
 
 This container image is made for use with Molecule and Ansible. It contains specific configuration for testing Ansible content. The image is not meant to use for other containerized applications.
 
