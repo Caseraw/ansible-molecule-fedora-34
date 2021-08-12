@@ -1,0 +1,59 @@
+name: Docker CI/CD
+
+on:
+  schedule:
+    - cron: '22 22 22 * *'
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  REGISTRY: docker.io
+  NAMESPACE: caseraw
+  IMAGE_NAME: ansible-molecule-fedora-34
+  TAG: latest
+
+jobs:
+  build_test_push:
+    name: Build test and push to DockerHub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build the image
+        run: docker build -t ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} .
+
+      - name: Get image list
+        run: docker images
+
+      - name: Run the container
+        run: >
+          docker run -d
+          --name ansible-molecule
+          --privileged
+          --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
+          ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
+          /usr/sbin/init
+
+      - name: Get container list
+        run: docker ps -a
+
+      - name: Get logs on created container
+        run: docker logs ansible-molecule
+
+      - name: Verify the container
+        run: docker exec --tty ansible-molecule env
+
+      - name: Login to registry
+        run: docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }} ${{ env.REGISTRY }}
+
+      - name: Push to registry
+        run: docker push ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
